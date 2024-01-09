@@ -56,7 +56,7 @@
                 issueDiv.innerHTML = '<strong>' + issue.title + '</strong><br>' +
                                      'Create Time：' + new Date(issue.created_at).toLocaleString() + '<br>' +
                                      'Assignee: ' + assignee +
-                                     'Label：' + labels.join(', ') + '<br>' +
+                                     '; Label：' + labels.join(', ') + '<br>' +
                                      'Comments Number：' + comments.length;
                 monthDiv.appendChild(issueDiv);
               });
