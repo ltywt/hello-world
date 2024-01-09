@@ -1,15 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Issue list</title>
+  <title>Paper Reading</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+    h1 {
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
+  <h1>Paper Reading</h1>
+  <div id="issues"></div>
   <script>
     fetch('https://api.github.com/repos/ltywt/hello-world/issues')
       .then(response => response.json())
       .then(data => {
-        let issueTitles = data.map(issue => issue.title);
-        document.body.innerHTML = issueTitles.join('<br>');
+        let issuesByMonth = {};
+        data.forEach(issue => {
+          let createdAt = new Date(issue.created_at);
+          let yearMonth = createdAt.getFullYear() + '-' + (createdAt.getMonth() + 1).toString().padStart(2, '0');
+          if (!issuesByMonth[yearMonth]) {
+            issuesByMonth[yearMonth] = [];
+          }
+          issuesByMonth[yearMonth].push(issue.title);
+        });
+
+        let sortedMonths = Object.keys(issuesByMonth).sort().reverse();
+        let issuesDiv = document.getElementById('issues');
+        sortedMonths.forEach(month => {
+          let monthDiv = document.createElement('div');
+          monthDiv.innerHTML = '<h2>' + month + '</h2>' + issuesByMonth[month].join('<br>');
+          issuesDiv.appendChild(monthDiv);
+        });
       })
       .catch(error => console.error(error));
   </script>
