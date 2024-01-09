@@ -1,30 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My Paper Reading</title>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <title>Issue list</title>
 </head>
 <body>
-    <h1>My Paper Reading</h1>
-    <div id="issues"></div>
-
-    <script>
-        axios.get('https://api.github.com/repos/ltywt/hello-world/issues')
-            .then(function(response) {
-                var issues = response.data;
-                var issuesDiv = document.getElementById('issues');
-                issues.forEach(function(issue) {
-                    var issueDiv = document.createElement('div');
-                    var a = document.createElement('a');
-                    a.href = issue.html_url;
-                    a.textContent = issue.title;
-                    issueDiv.appendChild(a);
-                    issuesDiv.appendChild(issueDiv);
-                });
-            })
-            .catch(function(error) {
-                console.log(error);
-            });
-    </script>
+  <script>
+    fetch('https://api.github.com/repos/ltywt/hello-world/issues')
+      .then(response => response.json())
+      .then(data => {
+        let issueTitles = data.map(issue => issue.title);
+        document.body.innerHTML = issueTitles.join('<br>');
+      })
+      .catch(error => console.error(error));
+  </script>
 </body>
 </html>
