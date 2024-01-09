@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Paper Reading</title>
+  <title>我的Issue列表</title>
   <style>
     body {
       text-align: center;
@@ -43,16 +43,23 @@
           let monthDiv = document.createElement('div');
           monthDiv.innerHTML = '<h2>' + month + '</h2>';
           issuesByMonth[month].forEach(issue => {
-            let issueDiv = document.createElement('div');
-            issueDiv.className = 'issue';
-            let labels = issue.labels.map(label => label.name);
-            if (labels.length === 0) {
-              labels.push('No label');
-            }
-            issueDiv.innerHTML = '<strong>' + issue.title + '</strong><br>' +
-                                 '创建时间：' + new Date(issue.created_at).toLocaleString() + '<br>' +
-                                 '标签：' + labels.join(', ');
-            monthDiv.appendChild(issueDiv);
+            fetch(issue.comments_url)
+              .then(response => response.json())
+              .then(comments => {
+                let issueDiv = document.createElement('div');
+                issueDiv.className = 'issue';
+                let labels = issue.labels.map(label => label.name);
+                if (labels.length === 0) {
+                  labels.push('No label');
+                }
+                let assignee = issue.assignee ? issue.assignee.login : 'No assignee';
+                issueDiv.innerHTML = '<strong>' + issue.title + '</strong><br>' +
+                                     'Create Time：' + new Date(issue.created_at).toLocaleString() + '<br>' +
+                                     'Assignee: ' + assignee +
+                                     'Label：' + labels.join(', ') + '<br>' +
+                                     'Comments Number：' + comments.length;
+                monthDiv.appendChild(issueDiv);
+              });
           });
           issuesDiv.appendChild(monthDiv);
         });
@@ -61,6 +68,5 @@
   </script>
 </body>
 </html>
-
 
 
