@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Paper Reading</title>
+</head>
+<body>
+    <h1>Paper Reading</h1>
+    <h2>1月</h2>
+    <div id="papers">
+        <!-- 在这里添加你的文章链接 -->
+    </div>
+
+    <form id="paperForm">
+        <label for="paperLink">文章链接:</label><br>
+        <input type="text" id="paperLink" name="paperLink"><br>
+        <input type="submit" value="提交">
+    </form>
+
+    <script>
+        // 假设你有一个包含文章的数组
+        var papers = [
+            // 添加更多文章...
+        ];
+
+        var papersDiv = document.getElementById("papers");
+
+        function updatePapers() {
+            papersDiv.innerHTML = '';
+            papers.forEach(function(paper) {
+                var paperDiv = document.createElement("div");
+
+                var a = document.createElement("a");
+                a.href = paper;
+                a.textContent = paper;
+                paperDiv.appendChild(a);
+
+                var button = document.createElement("button");
+                button.textContent = "投票";
+                button.onclick = function() {
+                    alert("谢谢你的投票！");
+                    // 在这里添加投票的代码
+                };
+                paperDiv.appendChild(button);
+
+                papersDiv.appendChild(paperDiv);
+            });
+        }
+
+        document.getElementById("paperForm").onsubmit = function(e) {
+            e.preventDefault();
+            var paperLink = document.getElementById("paperLink").value;
+            if (paperLink) {
+                papers.push(paperLink);
+                updatePapers();
+            } else {
+                papersDiv.innerHTML = 'empty';
+            }
+        };
+
+        updatePapers();
+    </script>
+</body>
+</html>
