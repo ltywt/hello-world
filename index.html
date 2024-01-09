@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Paper Reading</title>
+  <title>我的Issue列表</title>
   <style>
     body {
       text-align: center;
@@ -9,6 +9,14 @@
     }
     h1 {
       font-weight: bold;
+    }
+    #issues {
+      text-align: left;
+      margin: 0 auto;
+      width: 80%;
+    }
+    .issue {
+      margin-bottom: 20px;
     }
   </style>
 </head>
@@ -26,14 +34,26 @@
           if (!issuesByMonth[yearMonth]) {
             issuesByMonth[yearMonth] = [];
           }
-          issuesByMonth[yearMonth].push(issue.title);
+          issuesByMonth[yearMonth].push(issue);
         });
 
         let sortedMonths = Object.keys(issuesByMonth).sort().reverse();
         let issuesDiv = document.getElementById('issues');
         sortedMonths.forEach(month => {
           let monthDiv = document.createElement('div');
-          monthDiv.innerHTML = '<h2>' + month + '</h2>' + issuesByMonth[month].join('<br>');
+          monthDiv.innerHTML = '<h2>' + month + '</h2>';
+          issuesByMonth[month].forEach(issue => {
+            let issueDiv = document.createElement('div');
+            issueDiv.className = 'issue';
+            let labels = issue.labels.map(label => label.name);
+            if (labels.length === 0) {
+              labels.push('No label');
+            }
+            issueDiv.innerHTML = '<strong>' + issue.title + '</strong><br>' +
+                                 '创建时间：' + new Date(issue.created_at).toLocaleString() + '<br>' +
+                                 '标签：' + labels.join(', ');
+            monthDiv.appendChild(issueDiv);
+          });
           issuesDiv.appendChild(monthDiv);
         });
       })
@@ -41,3 +61,6 @@
   </script>
 </body>
 </html>
+
+
+
